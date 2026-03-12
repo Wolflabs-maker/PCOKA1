@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOLF LABS | Present Continuous (A1)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Spotify Style Color Palette */
+            --wl-bg: #0A0A0A;
+            --wl-panel: #121212;
+            --wl-card: #181818;
+            --wl-border: #282828;
+            --wl-green: #1DB954;
+            --wl-green-hover: #1ed760;
+            --wl-text-main: #FFFFFF;
+            --wl-text-sub: #B3B3B3;
+            
+            /* PlayStation buttons colors */
+            --ps-triangle: #4ade80; 
+            --ps-circle: #ef4444;   
+            --ps-cross: #3b82f6;    
+            --ps-square: #ec4899;   
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--wl-bg);
+            color: var(--wl-text-main);
+            margin: 0;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        .clip-path-slant { clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--wl-border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E3E3E; }
+
+        /* Scanlines Effect */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 3px 100%;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
+        
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .animate-scale { animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        /* Mission Cards */
+        .mission-card {
+            background: linear-gradient(145deg, var(--wl-card), var(--wl-panel));
+            border: 1px solid var(--wl-border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(29, 185, 84, 0.1), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mission-card:hover {
+            border-color: var(--wl-green);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(29, 185, 84, 0.15);
+        }
+        
+        .mission-card:hover::before { opacity: 1; }
+
+        .mission-icon-wrap {
+            width: 50px; height: 50px;
+            border-radius: 12px;
+            background: rgba(29, 185, 84, 0.1);
+            color: var(--wl-green);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        .mission-card:hover .mission-icon-wrap {
+            background: var(--wl-green);
+            color: var(--wl-bg);
+            box-shadow: 0 0 15px rgba(29, 185, 84, 0.5);
+        }
+
+        /* PlayStation Style Buttons */
+        .btn-ps {
+            background: rgba(20, 20, 30, 0.6);
+            border: 2px solid var(--wl-border);
+            border-radius: 16px;
+            padding: 20px 30px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            min-width: 140px;
+        }
+        .btn-ps:hover {
+            transform: translateY(-5px);
+            background: rgba(40, 40, 60, 0.8);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .ps-icon-0 { color: var(--ps-triangle); text-shadow: 0 0 10px var(--ps-triangle); }
+        .ps-icon-1 { color: var(--ps-circle); text-shadow: 0 0 10px var(--ps-circle); }
+        .ps-icon-2 { color: var(--ps-cross); text-shadow: 0 0 10px var(--ps-cross); }
+        .ps-icon-3 { color: var(--ps-square); text-shadow: 0 0 10px var(--ps-square); }
+
+        /* Main Button (Action) */
+        .btn-main {
+            background-color: var(--wl-green);
+            color: var(--wl-bg);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 40px;
+            transition: all 0.2s;
+            border: none;
+        }
+        .btn-main:hover:not(:disabled) {
+            background-color: var(--wl-green-hover);
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(29, 185, 84, 0.4);
+        }
+        .btn-main:disabled {
+            background-color: var(--wl-border);
+            color: var(--wl-text-sub);
+            cursor: not-allowed;
+        }
+
+        /* Exercise Elements */
+        .combo-word {
+            background-color: var(--wl-card);
+            border: 1px solid var(--wl-border);
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .combo-word:hover {
+            border-color: var(--wl-green);
+            color: var(--wl-green);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(29, 185, 84, 0.2);
+        }
+
+        .glitch-word {
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .glitch-word:hover {
+            color: var(--wl-green);
+            background: rgba(29, 185, 84, 0.1);
+        }
+        .glitch-word.selected {
+            color: var(--wl-green);
+            background: rgba(29, 185, 84, 0.15);
+            text-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+            border: 1px solid var(--wl-green);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: var(--wl-border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: var(--wl-green);
+            width: 0%;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--wl-green);
+        }
+    </style>
+</head>
+<body class="flex h-screen relative">
+
+    <div class="scanlines"></div>
+
+    <!-- SIDEBAR (Hidden on small screens) -->
+    <aside class="w-72 bg-[#0A0A0A] border-r border-[#181818] flex flex-col justify-between hidden md:flex h-full relative z-20">
+        <div>
+            <!-- Logo Area -->
+            <div class="p-8">
+                <h1 class="orbitron text-2xl font-black tracking-widest flex items-center gap-3">
+                    <i class="fa-solid fa-wolf-pack-battalion text-[#1DB954] text-3xl drop-shadow-[0_0_8px_#1DB954]"></i>
+                    WOLF LABS
+                </h1>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="px-4 space-y-2 mt-4">
+                <a href="#" onclick="goHome()" class="flex items-center gap-4 px-4 py-3 text-white font-bold bg-[#181818] rounded-xl border border-[#282828]">
+                    <i class="fa-solid fa-layer-group text-lg w-6 text-center text-[#1DB954]"></i>
+                    Training Modules
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 text-[#B3B3B3] hover:text-white font-bold transition-colors rounded-xl hover:bg-[#121212]">
+                    <i class="fa-solid fa-chart-line text-lg w-6 text-center"></i>
+                    Performance
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 text-[#B3B3B3] hover:text-white font-bold transition-colors rounded-xl hover:bg-[#121212]">
+                    <i class="fa-solid fa-trophy text-lg w-6 text-center"></i>
+                    Leaderboard
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 text-[#B3B3B3] hover:text-white font-bold transition-colors rounded-xl hover:bg-[#121212]">
+                    <i class="fa-solid fa-gear text-lg w-6 text-center"></i>
+                    Settings
+                </a>
+            </nav>
+        </div>
+
+        <!-- User Profile (Bottom) -->
+        <div class="p-4">
+            <div class="bg-[#121212] border border-[#282828] rounded-2xl p-4 flex items-center gap-4 hover:border-[#1DB954] transition-colors cursor-pointer group">
+                <div class="relative">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=WolfStudent" class="w-12 h-12 rounded-full bg-[#282828]" alt="User">
+                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#121212] rounded-full"></div>
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <p class="text-sm font-bold text-white truncate">Agent Alpha</p>
+                    <p class="text-xs text-[#1DB954] font-bold orbitron">A1 BEGINNER</p>
+                </div>
+                <i class="fa-solid fa-ellipsis-vertical text-[#B3B3B3] group-hover:text-white px-2"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col bg-[#121212] relative overflow-hidden h-full">
+        
+        <!-- Background Glow -->
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-3xl h-64 bg-[#1DB954] opacity-[0.04] blur-[120px] rounded-full pointer-events-none"></div>
+
+        <!-- VIEW CONTAINER -->
+        <div id="view-container" class="flex-1 overflow-y-auto relative z-10 w-full h-full">
+            
+            <!-- VIEW: HOME (MISSIONS) -->
+            <div id="view-home" class="animate-fade h-full p-8 lg:p-12">
+                <header class="flex justify-between items-end mb-12">
+                    <div>
+                        <p class="text-[#1DB954] font-bold tracking-widest uppercase text-sm mb-2 orbitron"><i class="fa-solid fa-circle-dot animate-pulse mr-2"></i>Active Module</p>
+                        <h2 class="text-4xl md:text-6xl font-black tracking-tight">Present Continuous</h2>
+                        <p class="text-[#B3B3B3] mt-2 text-lg">Master the actions happening right now.</p>
+                    </div>
+                    <div class="hidden md:block text-right">
+                        <p class="text-xs text-[#B3B3B3] uppercase tracking-widest mb-1">Total XP</p>
+                        <p class="text-3xl font-black text-[#1DB954] orbitron drop-shadow-[0_0_8px_rgba(29,185,84,0.5)]" id="home-xp-display">0</p>
+                    </div>
+                </header>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-20">
+                    
+                    <!-- Mission 1 -->
+                    <div onclick="startMission(0)" class="mission-card">
+                        <div class="flex justify-between items-start">
+                            <div class="mission-icon-wrap"><i class="fa-solid fa-crosshairs"></i></div>
+                            <span class="text-xs font-bold text-[#1DB954] bg-[#1DB954]/10 px-3 py-1 rounded-full orbitron border border-[#1DB954]/20">M-01</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Structure Scan</h3>
+                        <p class="text-sm text-[#B3B3B3] mb-6">Identify the correct verb (am/is/are) for the ongoing action.</p>
+                        <div class="flex justify-between items-center text-[10px] orbitron font-bold text-[#B3B3B3] uppercase">
+                            <span>Easy</span>
+                            <span>5 Tracks</span>
+                        </div>
+                    </div>
+
+                    <!-- Mission 2 -->
+                    <div onclick="startMission(1)" class="mission-card">
+                        <div class="flex justify-between items-start">
+                            <div class="mission-icon-wrap"><i class="fa-solid fa-link"></i></div>
+                            <span class="text-xs font-bold text-[#1DB954] bg-[#1DB954]/10 px-3 py-1 rounded-full orbitron border border-[#1DB954]/20">M-02</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Web Combo</h3>
+                        <p class="text-sm text-[#B3B3B3] mb-6">Connect words to build logical sentences.</p>
+                        <div class="flex justify-between items-center text-[10px] orbitron font-bold text-[#B3B3B3] uppercase">
+                            <span>Easy</span>
+                            <span>5 Tracks</span>
+                        </div>
+                    </div>
+
+                    <!-- Mission 3 -->
+                    <div onclick="startMission(2)" class="mission-card">
+                        <div class="flex justify-between items-start">
+                            <div class="mission-icon-wrap"><i class="fa-solid fa-bug-slash"></i></div>
+                            <span class="text-xs font-bold text-[#1DB954] bg-[#1DB954]/10 px-3 py-1 rounded-full orbitron border border-[#1DB954]/20">M-03</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">System Glitch</h3>
+                        <p class="text-sm text-[#B3B3B3] mb-6">Detect and eliminate the grammar error in the sentence code.</p>
+                        <div class="flex justify-between items-center text-[10px] orbitron font-bold text-[#B3B3B3] uppercase">
+                            <span>Medium</span>
+                            <span>5 Tracks</span>
+                        </div>
+                    </div>
+
+                    <!-- Mission 4 -->
+                    <div onclick="startMission(3)" class="mission-card">
+                        <div class="flex justify-between items-start">
+                            <div class="mission-icon-wrap"><i class="fa-solid fa-walkie-talkie"></i></div>
+                            <span class="text-xs font-bold text-[#1DB954] bg-[#1DB954]/10 px-3 py-1 rounded-full orbitron border border-[#1DB954]/20">M-04</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Comms Relay</h3>
+                        <p class="text-sm text-[#B3B3B3] mb-6">Free conversation task. Respond to allies via radio.</p>
+                        <div class="flex justify-between items-center text-[10px] orbitron font-bold text-[#B3B3B3] uppercase">
+                            <span>Medium</span>
+                            <span>5 Tracks</span>
+                        </div>
+                    </div>
+
+                    <!-- Mission 5 -->
+                    <div onclick="startMission(4)" class="mission-card border-[#1DB954]/30 shadow-[0_0_20px_rgba(29,185,84,0.05)]">
+                        <div class="flex justify-between items-start">
+                            <div class="mission-icon-wrap bg-[#1DB954] text-black shadow-[0_0_15px_rgba(29,185,84,0.5)]"><i class="fa-solid fa-microphone-lines"></i></div>
+                            <span class="text-xs font-bold text-black bg-[#1DB954] px-3 py-1 rounded-full orbitron shadow-[0_0_10px_rgba(29,185,84,0.5)] animate-pulse">BOSS</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">The Final Cypher</h3>
+                        <p class="text-sm text-[#B3B3B3] mb-6">Final oral test. Describe the situation out loud.</p>
+                        <div class="flex justify-between items-center text-[10px] orbitron font-bold text-[#1DB954] uppercase">
+                            <span>Advanced</span>
+                            <span>Voice Attack</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- VIEW: ACTIVE EXERCISE -->
+            <div id="view-exercise" class="hidden h-full flex flex-col bg-[#121212]">
+                
+                <!-- Exercise Header -->
+                <header class="p-6 border-b border-[#181818] bg-[#0A0A0A]/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between">
+                    <div class="flex items-center gap-6 w-1/3">
+                        <button onclick="abortMission()" class="w-10 h-10 rounded-full bg-[#181818] border border-[#282828] flex items-center justify-center text-white hover:bg-[#282828] hover:border-[#1DB954] transition-all">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <div class="hidden sm:block">
+                            <p class="text-[10px] text-[#B3B3B3] uppercase tracking-widest orbitron" id="ex-header-title">M-01</p>
+                            <p class="font-bold" id="ex-header-subtitle">Structure Scan</p>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-1/3 flex flex-col items-center">
+                        <div class="flex justify-between w-full max-w-[250px] text-xs text-[#B3B3B3] mb-2 font-bold orbitron">
+                            <span id="progress-text">TRACK 1 / 5</span>
+                        </div>
+                        <div class="progress-container max-w-[250px]">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="w-1/3 text-right">
+                        <span class="bg-[#181818] border border-[#282828] px-4 py-2 rounded-full text-[10px] font-bold text-white orbitron">
+                            XP: <span id="ex-xp-display" class="text-[#1DB954] text-sm">0</span>
+                        </span>
+                    </div>
+                </header>
+
+                <!-- Exercise Arena -->
+                <div class="flex-1 overflow-y-auto flex flex-col items-center justify-center p-6 pb-32">
+                    <div class="w-full max-w-4xl">
+                        <p id="ex-instruction" class="text-[#1DB954] font-bold tracking-widest uppercase text-sm mb-10 text-center orbitron drop-shadow-[0_0_5px_rgba(29,185,84,0.3)]"></p>
+                        
+                        <!-- Dynamic Injection Zone -->
+                        <div id="ex-arena" class="w-full">
+                            <!-- Content injected here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Bar (Bottom) -->
+                <div class="absolute bottom-0 w-full p-6 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A] to-transparent flex justify-center pb-8 z-40">
+                    <button id="btn-action" onclick="submitAction()" class="btn-main w-full max-w-md py-5 text-lg flex items-center justify-center gap-3" disabled>
+                        <span id="btn-action-text">CHECK DATA</span>
+                        <i id="btn-action-icon" class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIEW: COMPLETION -->
+            <div id="view-completion" class="hidden h-full flex flex-col items-center justify-center relative z-10 bg-[#0A0A0A]">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(29,185,84,0.15)_0%,transparent_60%)] pointer-events-none"></div>
+                
+                <div class="relative z-10 text-center animate-scale w-full max-w-lg">
+                    <div class="w-32 h-32 mx-auto rounded-full bg-[#1DB954]/10 border-2 border-[#1DB954] flex items-center justify-center mb-8 shadow-[0_0_30px_rgba(29,185,84,0.3)]">
+                        <i class="fa-solid fa-check text-6xl text-[#1DB954]"></i>
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase orbitron text-white">Mission Complete</h1>
+                    <p class="text-lg text-[#B3B3B3] mb-10">Data synchronization finished.</p>
+                    
+                    <div class="bg-[#121212] border border-[#282828] rounded-2xl p-8 mb-10 flex justify-around shadow-lg">
+                        <div class="text-center">
+                            <p class="text-[10px] text-[#B3B3B3] uppercase tracking-widest mb-2 orbitron">XP Earned</p>
+                            <p id="completion-xp" class="text-4xl font-black text-[#1DB954]">+0</p>
+                        </div>
+                        <div class="w-px bg-[#282828]"></div>
+                        <div class="text-center">
+                            <p class="text-[10px] text-[#B3B3B3] uppercase tracking-widest mb-2 orbitron">Accuracy</p>
+                            <p class="text-4xl font-black text-white">100%</p>
+                        </div>
+                    </div>
+
+                    <button onclick="goHome()" class="btn-main px-16 py-5 text-lg w-full">
+                        RETURN TO DASHBOARD
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed top-6 left-1/2 transform -translate-x-1/2 bg-[#1DB954] text-black px-8 py-4 rounded-full font-bold shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 opacity-0 -translate-y-4 pointer-events-none z-[100] flex items-center gap-3 border-2 border-[#1ed760]">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-xl"></i>
+        <span id="toast-msg" class="text-lg">DATA VALIDATED</span>
+    </div>
+
+    <script>
+        // --- DATABASE: Present Continuous A1 (Based on PC.pdf) ---
+        
+        const psIcons = [
+            '<i class="fa-solid fa-caret-up text-4xl mb-2 ps-icon-0"></i>',   // Triangle
+            '<i class="fa-regular fa-circle text-3xl mb-2 ps-icon-1"></i>',   // Circle
+            '<i class="fa-solid fa-xmark text-4xl mb-2 ps-icon-2"></i>',      // Cross
+            '<i class="fa-regular fa-square text-3xl mb-2 ps-icon-3"></i>'    // Square
+        ];
+
+        const missions = [
+            // Mission 0: Structure (PS Buttons)
+            {
+                title: "Structure Scan",
+                id: "M-01",
+                type: 'scan',
+                tracks: [
+                    { q: "I ___ cooking dinner right now.", options: ["are", "is", "am", "be"], answer: 2, tip: "Use 'am' with 'I'." },
+                    { q: "She ___ reading a book in the living room.", options: ["am", "are", "be", "is"], answer: 3, tip: "Use 'is' with He/She/It." },
+                    { q: "They ___ exercising outside.", options: ["are", "is", "am", "be"], answer: 0, tip: "Use 'are' with You/We/They." },
+                    { q: "What ___ you doing?", options: ["is", "am", "be", "are"], answer: 3, tip: "In questions, use 'are' before 'you'." },
+                    { q: "My brother ___ sleeping.", options: ["are", "is", "am", "be"], answer: 1, tip: "My brother = He, so use 'is'." }
+                ]
+            },
+            // Mission 1: Combo (Syntax)
+            {
+                title: "Web Combo",
+                id: "M-02",
+                type: 'combo',
+                tracks: [
+                    { target: "I am studying English.", words: ["studying", "I", "English.", "am"] },
+                    { target: "He is going to work.", words: ["going", "work.", "He", "to", "is"] },
+                    { target: "They are watching TV.", words: ["TV.", "watching", "are", "They"] },
+                    { target: "Are you listening to music?", words: ["music?", "listening", "Are", "to", "you"] },
+                    { target: "She is not eating pizza.", words: ["is", "eating", "pizza.", "not", "She"] }
+                ]
+            },
+            // Mission 2: Glitch (Errors)
+            {
+                title: "System Glitch",
+                id: "M-03",
+                type: 'glitch',
+                tracks: [
+                    { sentence: ["I", "is", "working", "right", "now."], errorIdx: 1, fix: "am" },
+                    { sentence: ["They", "am", "eating", "dinner."], errorIdx: 1, fix: "are" },
+                    { sentence: ["She", "are", "sleeping", "in", "the", "bedroom."], errorIdx: 1, fix: "is" },
+                    { sentence: ["We", "is", "studying", "Spanish."], errorIdx: 1, fix: "are" },
+                    { sentence: ["What", "am", "you", "doing?"], errorIdx: 1, fix: "are" }
+                ]
+            },
+            // Mission 3: Comms (Free Conversation)
+            {
+                title: "Comms Relay",
+                id: "M-04",
+                type: 'comms',
+                tracks: [
+                    { q: "What are you doing right now?", starter: "I am..." },
+                    { q: "Is someone cooking in your house?", starter: "Yes, someone is... / No, nobody is..." },
+                    { q: "What are your friends doing?", starter: "They are..." },
+                    { q: "Are you watching TV?", starter: "No, I am..." },
+                    { q: "Is it raining outside?", starter: "Yes, it is... / No, it is not..." }
+                ]
+            },
+            // Mission 4: Boss (Oral Cypher)
+            {
+                title: "The Final Cypher",
+                id: "M-05",
+                type: 'speaking',
+                tracks: [
+                    { prompt: "Look around your house. What is your family doing?", starter: "My mom is... My dad is..." },
+                    { prompt: "Imagine you are at the park. What are people doing?", starter: "Some people are... A boy is..." },
+                    { prompt: "Mime an action (act it out). What are you doing?", starter: "I am..." },
+                    { prompt: "What is your teacher doing right now?", starter: "My teacher is..." },
+                    { prompt: "Tell me about your best friend. What is he/she doing today?", starter: "He/She is..." }
+                ]
+            }
+        ];
+
+        // --- APP STATE ---
+        let currentMIndex = -1;
+        let currentTIndex = 0;
+        let xpTotal = 0;
+        
+        let selectedMcq = -1;
+        let comboArr = [];
+        let glitchSelected = -1;
+        let voiceActive = false;
+
+        // --- UTILITY FUNCTIONS ---
+        function shuffle(arr) {
+            let copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function getRandomTransform() {
+            const rot = Math.floor(Math.random() * 30) - 15;
+            const x = Math.floor(Math.random() * 40) - 20;
+            const y = Math.floor(Math.random() * 40) - 20;
+            return `transform: rotate(${rot}deg) translate(${x}px, ${y}px);`;
+        }
+
+        function showToast(msg, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            
+            if(isSuccess) {
+                toast.className = "fixed top-6 left-1/2 transform -translate-x-1/2 bg-[#1DB954] text-black px-8 py-4 rounded-full font-bold shadow-[0_10px_30px_rgba(29,185,84,0.4)] transition-all duration-300 z-[100] flex items-center gap-3 border-2 border-[#1ed760] opacity-100 translate-y-0";
+                document.getElementById('toast-icon').className = "fa-solid fa-circle-check text-xl";
+            } else {
+                toast.className = "fixed top-6 left-1/2 transform -translate-x-1/2 bg-[#E23636] text-white px-8 py-4 rounded-full font-bold shadow-[0_10px_30px_rgba(226,54,54,0.4)] transition-all duration-300 z-[100] flex items-center gap-3 border-2 border-[#ff6b6b] opacity-100 translate-y-0";
+                document.getElementById('toast-icon').className = "fa-solid fa-triangle-exclamation text-xl";
+            }
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', '-translate-y-4');
+            }, 2500);
+        }
+
+        function updateXpDisplay() {
+            document.getElementById('home-xp-display').innerText = xpTotal;
+            document.getElementById('ex-xp-display').innerText = xpTotal;
+        }
+
+        // --- NAVIGATION ---
+        function goHome() {
+            document.getElementById('view-home').classList.remove('hidden');
+            document.getElementById('view-exercise').classList.add('hidden');
+            document.getElementById('view-completion').classList.add('hidden');
+            updateXpDisplay();
+        }
+
+        function startMission(index) {
+            currentMIndex = index;
+            currentTIndex = 0;
+            const m = missions[index];
+
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-completion').classList.add('hidden');
+            document.getElementById('view-exercise').classList.remove('hidden');
+
+            document.getElementById('ex-header-title').innerText = m.id;
+            document.getElementById('ex-header-subtitle').innerText = m.title;
+
+            renderTrack();
+        }
+
+        function abortMission() { goHome(); }
+
+        // --- RENDER EXERCISES ---
+        function renderTrack() {
+            const m = missions[currentMIndex];
+            const t = m.tracks[currentTIndex];
+            const arena = document.getElementById('ex-arena');
+            const instruction = document.getElementById('ex-instruction');
+            
+            // Reset variables
+            selectedMcq = -1;
+            comboArr = [];
+            glitchSelected = -1;
+            voiceActive = false;
+
+            // Update Progress
+            const progPct = (currentTIndex / m.tracks.length) * 100;
+            document.getElementById('progress-fill').style.width = progPct + '%';
+            document.getElementById('progress-text').innerText = `TRACK ${currentTIndex + 1} / ${m.tracks.length}`;
+
+            // Reset Action Button
+            updateActionButton(false, "Check");
+
+            let html = '';
+
+            if (m.type === 'scan') {
+                instruction.innerText = "Select the correct verb for the ongoing action.";
+                html = `
+                    <h2 class="text-3xl md:text-5xl font-black mb-16 text-center leading-tight">"${t.q}"</h2>
+                    <div class="flex flex-wrap justify-center gap-6">
+                        ${t.options.map((opt, i) => `
+                            <button onclick="selectMcq(${i})" id="mcq-btn-${i}" class="btn-ps group">
+                                ${psIcons[i]}
+                                <span class="text-xl font-bold orbitron uppercase tracking-widest text-[#B3B3B3] group-hover:text-white transition-colors" id="mcq-text-${i}">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } 
+            else if (m.type === 'combo') {
+                instruction.innerText = "Order the words to build the correct sentence.";
+                const shuf = shuffle([...t.words]);
+                html = `
+                    <div class="bg-[#181818] border border-[#282828] rounded-2xl p-8 mb-16 min-h-[140px] flex items-center justify-center">
+                        <div id="combo-result" class="text-3xl font-bold flex flex-wrap gap-3 justify-center items-center text-white">
+                            <span class="text-[#3E3E3E] font-normal orbitron text-lg">The sentence will appear here...</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-6 justify-center bg-black/40 p-10 border border-white/5 rounded-2xl">
+                        ${shuf.map((w, i) => `
+                            <button style="${getRandomTransform()}" onclick="selectCombo(this, '${w}')" class="combo-word text-3xl">${w}</button>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            else if (m.type === 'glitch') {
+                instruction.innerText = "Detect the glitch. Click the word with the grammar error.";
+                html = `
+                    <div class="bg-[#181818] border border-[#282828] rounded-2xl p-16 flex justify-center items-center">
+                        <div class="flex flex-wrap gap-4 justify-center text-5xl md:text-6xl font-black">
+                            ${t.sentence.map((w, i) => `
+                                <span onclick="selectGlitch(${i}, this)" class="glitch-word">${w}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            else if (m.type === 'comms' || m.type === 'speaking') {
+                const qText = m.type === 'comms' ? t.q : t.prompt;
+                instruction.innerText = "Voice command. Complete the sentence out loud.";
+                html = `
+                    <div class="bg-[#181818] border border-[#282828] rounded-2xl p-10 mb-8 text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#1DB954] to-transparent opacity-50"></div>
+                        <i class="fa-solid fa-satellite-dish text-[#1DB954] text-5xl mb-6 opacity-80 drop-shadow-[0_0_10px_#1DB954]"></i>
+                        <h2 class="text-3xl font-bold mb-10 text-white italic">"${qText}"</h2>
+                        
+                        <div class="bg-[#121212] p-6 rounded-xl border border-[#282828] text-center mx-auto max-w-lg shadow-inner">
+                            <p class="text-[10px] text-[#B3B3B3] uppercase tracking-widest mb-3 orbitron">Speaking Starter</p>
+                            <p class="text-3xl font-bold text-[#1DB954]">"${t.starter}"</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center">
+                        <button id="mic-btn" onclick="toggleVoice()" class="w-24 h-24 rounded-full bg-[#181818] border-2 border-[#282828] flex items-center justify-center text-3xl hover:border-[#1DB954] hover:text-[#1DB954] transition-all">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+                        <p id="mic-status" class="mt-4 text-[#B3B3B3] text-sm font-bold orbitron">CLICK TO RECORD</p>
+                    </div>
+                `;
+            }
+
+            arena.innerHTML = `<div class="animate-fade w-full">${html}</div>`;
+        }
+
+        // --- INTERACTION LOGIC ---
+        function updateActionButton(enable, state) {
+            const btn = document.getElementById('btn-action');
+            const text = document.getElementById('btn-action-text');
+            const icon = document.getElementById('btn-action-icon');
+            
+            if(enable) {
+                btn.disabled = false;
+                if(state === 'Check') {
+                    text.innerText = "CHECK DATA";
+                    icon.className = "fa-solid fa-arrow-right";
+                } else if(state === 'Next') {
+                    text.innerText = "CONTINUE";
+                    icon.className = "fa-solid fa-forward-step";
+                }
+            } else {
+                btn.disabled = true;
+                text.innerText = "CHECK DATA";
+                icon.className = "fa-solid fa-arrow-right";
+            }
+            
+            btn.setAttribute('data-state', enable ? state : 'Disabled');
+        }
+
+        function selectMcq(index) {
+            const t = missions[currentMIndex].tracks[currentTIndex];
+            selectedMcq = index;
+            
+            for(let i=0; i<t.options.length; i++){
+                const btn = document.getElementById(`mcq-btn-${i}`);
+                const text = document.getElementById(`mcq-text-${i}`);
+                btn.classList.remove('selected');
+                text.classList.remove('text-[#1DB954]');
+                text.classList.add('text-[#B3B3B3]');
+            }
+            
+            const selectedBtn = document.getElementById(`mcq-btn-${index}`);
+            const selectedText = document.getElementById(`mcq-text-${index}`);
+            selectedBtn.classList.add('selected');
+            selectedText.classList.remove('text-[#B3B3B3]');
+            selectedText.classList.add('text-[#1DB954]');
+            
+            updateActionButton(true, 'Check');
+        }
+
+        function selectCombo(btn, word) {
+            if(comboArr.length === 0) {
+                document.getElementById('combo-result').innerHTML = '';
+            }
+            
+            comboArr.push(word);
+            btn.style.visibility = 'hidden';
+            
+            const res = document.getElementById('combo-result');
+            const span = document.createElement('span');
+            span.className = "animate-scale bg-[#282828] border border-[#3E3E3E] px-5 py-3 rounded-lg";
+            span.innerText = word;
+            res.appendChild(span);
+
+            const t = missions[currentMIndex].tracks[currentTIndex];
+            if(comboArr.length === t.words.length) {
+                updateActionButton(true, 'Check');
+            }
+        }
+
+        function selectGlitch(index, element) {
+            glitchSelected = index;
+            
+            const siblings = element.parentElement.children;
+            for(let el of siblings) { el.classList.remove('selected'); }
+            element.classList.add('selected');
+            
+            updateActionButton(true, 'Check');
+        }
+
+        function toggleVoice() {
+            const mic = document.getElementById('mic-btn');
+            const status = document.getElementById('mic-status');
+            
+            if(!voiceActive) {
+                voiceActive = true;
+                mic.className = "w-24 h-24 rounded-full bg-[#1DB954] text-[#121212] flex items-center justify-center text-3xl shadow-[0_0_30px_rgba(29,185,84,0.6)] animate-pulse border-none";
+                status.innerText = "LISTENING... CLICK TO STOP";
+                status.className = "mt-4 text-[#1DB954] text-sm font-bold orbitron drop-shadow-[0_0_5px_#1DB954]";
+            } else {
+                voiceActive = false;
+                mic.className = "w-24 h-24 rounded-full bg-[#282828] border-2 border-[#1DB954] text-[#1DB954] flex items-center justify-center text-3xl";
+                status.innerText = "AUDIO CAPTURED";
+                status.className = "mt-4 text-white text-sm font-bold orbitron";
+                updateActionButton(true, 'Check');
+            }
+        }
+
+        function submitAction() {
+            const btn = document.getElementById('btn-action');
+            const state = btn.getAttribute('data-state');
+            
+            if(state === 'Disabled') return;
+
+            if(state === 'Next') {
+                nextTrack();
+                return;
+            }
+
+            const m = missions[currentMIndex];
+            const t = m.tracks[currentTIndex];
+            let isCorrect = false;
+
+            if (m.type === 'scan') {
+                isCorrect = (selectedMcq === t.answer);
+            } 
+            else if (m.type === 'combo') {
+                isCorrect = (comboArr.join(' ') === t.target);
+            }
+            else if (m.type === 'glitch') {
+                isCorrect = (glitchSelected === t.errorIdx);
+            }
+            else if (m.type === 'comms' || m.type === 'speaking') {
+                isCorrect = true; // Voice is auto-correct for this demo
+            }
+
+            if(isCorrect) {
+                xpTotal += 100;
+                updateXpDisplay();
+                showToast("DATA VALIDATED! +100 XP", true);
+                
+                if(m.type === 'glitch') {
+                    const words = document.querySelectorAll('.glitch-word');
+                    words[glitchSelected].innerText = t.fix;
+                    words[glitchSelected].classList.add('bg-[#1DB954]', 'text-black', 'border-none');
+                    words[glitchSelected].classList.remove('selected');
+                }
+                
+                updateActionButton(true, 'Next');
+            } else {
+                let tip = t.tip || "Incorrect sequence. Try again.";
+                if(m.type === 'glitch') tip = `Error at '${t.sentence[t.errorIdx]}'. It should be '${t.fix}'.`;
+                showToast(tip, false);
+                
+                if(m.type === 'combo') {
+                    renderTrack(); 
+                }
+            }
+        }
+
+        function nextTrack() {
+            currentTIndex++;
+            const m = missions[currentMIndex];
+
+            if(currentTIndex >= m.tracks.length) {
+                showCompletion();
+            } else {
+                renderTrack();
+            }
+        }
+
+        function showCompletion() {
+            document.getElementById('view-exercise').classList.add('hidden');
+            document.getElementById('view-completion').classList.remove('hidden');
+            document.getElementById('completion-xp').innerText = `+${missions[currentMIndex].tracks.length * 100}`;
+            
+            document.getElementById('progress-fill').style.width = '100%';
+            document.getElementById('progress-text').innerText = `TRACK ${missions[currentMIndex].tracks.length} / ${missions[currentMIndex].tracks.length}`;
+        }
+    </script>
+</body>
+</html>
